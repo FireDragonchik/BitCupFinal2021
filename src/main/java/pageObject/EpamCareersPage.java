@@ -2,6 +2,9 @@ package pageObject;
 
 import framework.elements.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 import static framework.utils.WebElementUtils.DEFAULT_TIMEOUT;
 
@@ -27,7 +30,8 @@ public class EpamCareersPage extends AbstractPage {
     private final String XPATH_LOCATION_COUNTRY = "//form[contains(@id,'jobSearch')]//ul//li[@aria-label='%s']";
     private final String XPATH_LOCATION_CITY = XPATH_LOCATION_COUNTRY + "//li[contains(text(),'%s')]";
     private final String XPATH_SKILLS_OPTION = "//form[contains(@id,'jobSearch')]//label[text()='Skills']//following-sibling::div/div[contains(@class,'multi')]//span[contains(text(),'%s')]";
-    private final String XPATH_WORK_OPTION = "//form[contains(@id,'jobSearch')]//label[contains(text(),'%s')]//preceding-sibling::input";
+    private final String XPATH_WORK_OPTION = "//form[contains(@id,'jobSearch')]//label[contains(text(),'%s')]";
+    private final String XPATH_SEARCH_RESULT_LIST = "//ul[@class='search-result__list']";
 
     private final Button btnLocation = new Button(By.xpath("//ul[contains(@class,'header')]//button[contains(@class,'location')]"), "Location button");
     private final Button btnSearch = new Button(By.xpath("//form[contains(@id,'jobSearch')]//button"), "Search button");
@@ -77,6 +81,7 @@ public class EpamCareersPage extends AbstractPage {
         drpdSkills.click();
         webElementUtils().waitForVisibilityOf(getChbSkillOption(skillName), DEFAULT_TIMEOUT);
         getChbSkillOption(skillName).click();
+        drpdSkills.click();
     }
 
     public void selectWorkOption(String workOption) {
@@ -91,8 +96,12 @@ public class EpamCareersPage extends AbstractPage {
         fillLocation(country, city);
         selectSkill(skillName);
         selectWorkOption(workOption);
-        drpdSkills.click();
         btnSearch.click();
+    }
+
+    public List<WebElement> getSearchResultValues(){
+
+        return getSearchResultList().findElement().findElements(By.xpath("/li//div/h5/a"));
     }
 
     private Checkbox getChbWorkOption(String workOption) {
@@ -118,5 +127,10 @@ public class EpamCareersPage extends AbstractPage {
     private Label getLocationCity(String country, String city) {
 
         return new Label(By.xpath(String.format(XPATH_LOCATION_CITY, country, city)), String.format("Location city %s option", city));
+    }
+
+    private Label getSearchResultList(){
+
+        return new Label(By.xpath(XPATH_SEARCH_RESULT_LIST), "Search result list");
     }
 }

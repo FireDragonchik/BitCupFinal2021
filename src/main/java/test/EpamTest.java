@@ -2,8 +2,11 @@ package test;
 
 import framework.browser.BrowserUtils;
 import framework.elements.BaseTest;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import pageObject.EpamCareersPage;
+
+import java.util.List;
 
 public class EpamTest extends BaseTest {
 
@@ -28,6 +31,8 @@ public class EpamTest extends BaseTest {
         BrowserUtils.get(CAREERS_PAGE_URL);
 
         epamCareersPage.fillSearchCriteria(KEYWORD, COUNTRY, CITY, SKILL, WORK_OPTION);
+
+        List<WebElement> list = epamCareersPage.getSearchResultValues();
 
         logger.info("OK, test ended");
     }
